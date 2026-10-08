@@ -1,0 +1,11 @@
+{
+  "models": {
+    "gpt-oss": { "kind": "managed", "executable": "llama-server", "modelPathEnv": "GPT_OSS_MODEL_PATH", "endpoint": "http://127.0.0.1:8080/v1", "port": 8080, "contextSize": 4096, "gpuLayers": 20, "threads": 8, "extraArgs": ["--fit", "on", "--parallel", "1"], "startupTimeoutMs": 180000 },
+    "qwen": { "kind": "managed", "executable": "llama-server", "modelPathEnv": "QWEN_MODEL_PATH", "endpoint": "http://127.0.0.1:8081/v1", "port": 8081, "contextSize": 2048, "gpuLayers": 16, "threads": 8, "extraArgs": ["--fit", "on", "--parallel", "1"], "startupTimeoutMs": 180000 }
+  },
+  "roles": { "planner": "gpt-oss", "coder": "qwen", "reviewer": "gpt-oss" },
+  "limits": { "maxFixAttempts": 3, "maxTaskMs": 1800000, "maxOutputTokens": 1800, "maxContextChars": 40000, "maxFileBytes": 1000000, "maxPatchBytes": 200000, "maxCommandOutputBytes": 200000 },
+  "resources": { "minimumFreeVramMiB": 1024, "minimumFreeRamMiB": 4096, "allowConcurrentModels": false },
+  "workspace": { "allowedCommands": ["npm test", "npm run check", "npm run typecheck", "npm run lint", "npm run build"], "writeEnabled": true, "sandbox": { "mode": "docker", "image": "node:22.13-bookworm-slim", "memory": "4g", "cpus": 4, "pidsLimit": 256 } },
+  "runsDir": ".runs"
+}
