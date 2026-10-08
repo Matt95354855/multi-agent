@@ -1,0 +1,6 @@
+{
+  "models": {
+    "gpt-oss": { "kind": "external", "endpoint": "http://127.0.0.1:8080/v1", "port": 8080, "contextSize": 4096 },
+    "qwen": { "kind": "external", "endpoint": "http://127.0.0.1:8081/v1", "port": 8081, "contextSize": 2048 }
+  }
+}
