@@ -8,7 +8,7 @@ import { PathGuard } from '../security/path-guard.js';
 import { redactText } from '../security/redaction.js';
 import { runProcess } from '../utils/process.js';
 
-export interface WorkspaceOptions { maxFileBytes: number; maxPatchBytes: number; maxCommandOutputBytes: number; allowedCommands: string[]; writeEnabled: boolean }
+export interface WorkspaceOptions { maxFileBytes: number; maxPatchBytes: number; maxCommandOutputBytes: number; allowedCommands: string[]; writeEnabled: boolean; sandbox: { mode: 'host' } | { mode: 'docker'; image: string; memory: string; cpus: number; pidsLimit: number } }
 export class SecureWorkspace {
   private constructor(readonly root: string, private readonly guard: PathGuard, private readonly options: WorkspaceOptions, private readonly policy: CommandPolicy) {}
   static async open(root: string, options: WorkspaceOptions): Promise<SecureWorkspace> { const guard = await PathGuard.create(root); return new SecureWorkspace(guard.root, guard, options, new CommandPolicy(options.allowedCommands)); }
@@ -42,7 +42,9 @@ export class SecureWorkspace {
     const results: Validation['commands'] = [];
     for (const command of commands) {
       const approved = this.policy.authorize(command);
-      const result = await runProcess(approved.file, approved.args, { cwd: this.root, timeoutMs, maxOutputBytes: this.options.maxCommandOutputBytes, ...(signal ? { signal } : {}), env: safeEnvironment() });
+      const result = this.options.sandbox.mode === 'docker'
+        ? await runProcess('docker', ['run', '--rm', '--network', 'none', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges', '--pids-limit', String(this.options.sandbox.pidsLimit), '--memory', this.options.sandbox.memory, '--cpus', String(this.options.sandbox.cpus), '--volume', `${this.root}:/workspace:rw`, '--workdir', '/workspace', this.options.sandbox.image, approved.file, ...approved.args], { timeoutMs, maxOutputBytes: this.options.maxCommandOutputBytes, ...(signal ? { signal } : {}), env: safeEnvironment() })
+        : await runProcess(approved.file, approved.args, { cwd: this.root, timeoutMs, maxOutputBytes: this.options.maxCommandOutputBytes, ...(signal ? { signal } : {}), env: safeEnvironment() });
       results.push({ command, exitCode: result.exitCode, timedOut: result.timedOut, output: redactText(`${result.stdout}\n${result.stderr}`).slice(0, this.options.maxCommandOutputBytes), durationMs: result.durationMs });
       if (result.exitCode !== 0 || result.timedOut) break;
     }

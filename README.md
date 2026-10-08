@@ -11,7 +11,7 @@ Plateforme locale et bornée de développement logiciel multi-agent, conçue pou
 - Machine à états explicite : `PLAN → IMPLEMENT → REVIEW → TEST → FIX → FINALIZE`.
 - Sorties Planner, Coder et Reviewer validées par Zod ; aucune transition ne dépend d'un simple texte libre.
 - Un seul modèle géré actif par défaut, arrêt contrôlé avant bascule, détection de port, contrôle de santé et seuils RAM/VRAM.
-- Écritures désactivées sans `--approve-write`; commandes exactes en liste blanche et lancées sans shell.
+- Écritures désactivées sans `--approve-write`; commandes exactes en liste blanche, lancées sans shell dans un conteneur Docker verrouillé par défaut.
 - Chemins bornés au workspace, contrôle des liens symboliques, limites de taille, délais, environnement nettoyé et traces expurgées.
 - Checkpoints JSON atomiques et idempotence des changements par empreinte SHA-256.
 - Aucune fusion automatique. La publication exige `--approve-external` et ouvre seulement une PR.
@@ -84,6 +84,8 @@ Le JSON contient succès réel, régressions, tentatives, durée, tokens rapport
 | `src/evaluation` | Corpus de 50 tâches et rapports comparatifs |
 
 La conception détaillée est dans [docs/architecture.md](docs/architecture.md), le modèle de sécurité dans [docs/security.md](docs/security.md), et le guide Windows dans [docs/windows.md](docs/windows.md).
+
+Docker doit être disponible pour les validations avec la configuration par défaut. Pour un dépôt entièrement fiable seulement, `workspace.sandbox` peut être remplacé par `{ "mode": "host" }`.
 
 ## Limites connues
 

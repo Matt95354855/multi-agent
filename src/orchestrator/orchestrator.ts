@@ -36,7 +36,7 @@ export class Orchestrator {
   private async execute(checkpoint: RunCheckpoint, writeApproved: boolean, signal?: AbortSignal): Promise<RunCheckpoint> {
     const deadline = AbortSignal.timeout(this.config.limits.maxTaskMs);
     const activeSignal = signal ? AbortSignal.any([signal, deadline]) : deadline;
-    const workspace = await SecureWorkspace.open(checkpoint.workspace, { ...this.config.limits, allowedCommands: this.config.workspace.allowedCommands, writeEnabled: this.config.workspace.writeEnabled && writeApproved });
+    const workspace = await SecureWorkspace.open(checkpoint.workspace, { ...this.config.limits, allowedCommands: this.config.workspace.allowedCommands, writeEnabled: this.config.workspace.writeEnabled && writeApproved, sandbox: this.config.workspace.sandbox });
     try {
       while (checkpoint.state !== 'FINALIZE' && checkpoint.state !== 'FAILED') {
         activeSignal.throwIfAborted();

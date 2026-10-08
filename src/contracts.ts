@@ -14,7 +14,13 @@ export const appConfigSchema = z.object({
   roles: z.object({ planner: z.string(), coder: z.string(), reviewer: z.string() }),
   limits: z.object({ maxFixAttempts: z.number().int().min(0).max(10), maxTaskMs: z.number().int().min(1000), maxOutputTokens: z.number().int().min(128), maxContextChars: z.number().int().min(1000), maxFileBytes: z.number().int().min(1024), maxPatchBytes: z.number().int().min(1024), maxCommandOutputBytes: z.number().int().min(1024) }),
   resources: z.object({ minimumFreeVramMiB: z.number().nonnegative(), minimumFreeRamMiB: z.number().nonnegative(), allowConcurrentModels: z.boolean() }),
-  workspace: z.object({ allowedCommands: z.array(z.string().min(1)).min(1), writeEnabled: z.boolean() }),
+  workspace: z.object({
+    allowedCommands: z.array(z.string().min(1)).min(1), writeEnabled: z.boolean(),
+    sandbox: z.discriminatedUnion('mode', [
+      z.object({ mode: z.literal('host') }),
+      z.object({ mode: z.literal('docker'), image: z.string().min(1), memory: z.string().regex(/^\d+[mg]$/i), cpus: z.number().positive().max(64), pidsLimit: z.number().int().min(16).max(4096) }),
+    ]),
+  }),
   runsDir: z.string().min(1),
 });
 export type AppConfig = z.infer<typeof appConfigSchema>;

@@ -9,7 +9,7 @@ import { QueueModel, seedRepository } from '../helpers.js';
 
 test('executes PLAN -> IMPLEMENT -> REVIEW -> TEST -> FINALIZE with simulated models', async () => {
   const root = await mkdtemp(join(tmpdir(), 'orchestrator-')); await seedRepository(root); const base = await loadAppConfig('config/default.json');
-  const config = { ...base, runsDir: join(root, '.runs'), limits: { ...base.limits, maxTaskMs: 60000 } };
+  const config = { ...base, runsDir: join(root, '.runs'), limits: { ...base.limits, maxTaskMs: 60000 }, workspace: { ...base.workspace, sandbox: { mode: 'host' as const } } };
   const planner = new QueueModel([{ summary: 'fix', tasks: [{ id: '1', description: 'fix value', files: ['src/index.js'], acceptanceCriteria: ['tests pass'] }], risks: [], testCommands: ['npm test'] }]);
   const coder = new QueueModel([{ rationale: 'fix value', changes: [{ path: 'src/index.js', content: 'export const value = 2;\n', reason: 'test expects 2' }] }]);
   const reviewer = new QueueModel([{ verdict: 'approve', summary: 'ok', findings: [] }]);
@@ -19,7 +19,7 @@ test('executes PLAN -> IMPLEMENT -> REVIEW -> TEST -> FINALIZE with simulated mo
 });
 
 test('persists checkpoints and resumes a planned run', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'resume-')); await seedRepository(root); const base = await loadAppConfig('config/default.json'); const config = { ...base, runsDir: join(root, '.runs') };
+  const root = await mkdtemp(join(tmpdir(), 'resume-')); await seedRepository(root); const base = await loadAppConfig('config/default.json'); const config = { ...base, runsDir: join(root, '.runs'), workspace: { ...base.workspace, sandbox: { mode: 'host' as const } } };
   const models = { planner: new QueueModel([]), coder: new QueueModel([{ rationale: 'fix', changes: [{ path: 'src/index.js', content: 'export const value = 2;\n', reason: 'fix' }] }]), reviewer: new QueueModel([{ verdict: 'approve', summary: 'ok', findings: [] }]) };
   const orchestrator = new Orchestrator(config, { models }); const now = new Date().toISOString(); const runId = '12345678-1234-1234-1234-123456789abc';
   await orchestrator.store.save({ version: 1, runId, request: 'fix', repository: root, workspace: root, state: 'IMPLEMENT', startedAt: now, updatedAt: now, plan: { summary: 'fix', tasks: [{ id: '1', description: 'fix', files: ['src/index.js'], acceptanceCriteria: ['pass'] }], risks: [], testCommands: ['npm test'] }, fixAttempts: 0, appliedChangeHashes: [], usage: { promptTokens: 0, completionTokens: 0, totalTokens: 0, modelSwitches: 0 }, events: [] });
@@ -27,7 +27,7 @@ test('persists checkpoints and resumes a planned run', async () => {
 });
 
 test('routes a requested change through FIX and re-reviews it', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'fix-loop-')); await seedRepository(root); const base = await loadAppConfig('config/default.json'); const config = { ...base, runsDir: join(root, '.runs') };
+  const root = await mkdtemp(join(tmpdir(), 'fix-loop-')); await seedRepository(root); const base = await loadAppConfig('config/default.json'); const config = { ...base, runsDir: join(root, '.runs'), workspace: { ...base.workspace, sandbox: { mode: 'host' as const } } };
   const planner = new QueueModel([{ summary: 'fix', tasks: [{ id: '1', description: 'fix', files: ['src/index.js'], acceptanceCriteria: ['pass'] }], risks: [], testCommands: ['npm test'] }]);
   const coder = new QueueModel([
     { rationale: 'first', changes: [{ path: 'src/index.js', content: 'export const value = 1;\n', reason: 'first' }] },
@@ -39,7 +39,7 @@ test('routes a requested change through FIX and re-reviews it', async () => {
 });
 
 test('stops when the correction budget is exhausted', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'budget-')); await seedRepository(root); const base = await loadAppConfig('config/default.json'); const config = { ...base, runsDir: join(root, '.runs'), limits: { ...base.limits, maxFixAttempts: 0 } };
+  const root = await mkdtemp(join(tmpdir(), 'budget-')); await seedRepository(root); const base = await loadAppConfig('config/default.json'); const config = { ...base, runsDir: join(root, '.runs'), limits: { ...base.limits, maxFixAttempts: 0 }, workspace: { ...base.workspace, sandbox: { mode: 'host' as const } } };
   const planner = new QueueModel([{ summary: 'fix', tasks: [{ id: '1', description: 'fix', files: ['src/index.js'], acceptanceCriteria: ['pass'] }], risks: [], testCommands: ['npm test'] }]);
   const coder = new QueueModel([{ rationale: 'bad', changes: [{ path: 'src/index.js', content: 'export const value = 1;\n', reason: 'bad' }] }]);
   const reviewer = new QueueModel([{ verdict: 'request_changes', summary: 'no', findings: [{ severity: 'high', message: 'bad', required: true }] }]);

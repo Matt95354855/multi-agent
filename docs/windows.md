@@ -5,6 +5,7 @@
 - Windows 11, Git et GitHub CLI ;
 - Node.js 22.13 ou supérieur ;
 - une version récente de `llama-server.exe` compatible avec vos GGUF ;
+- Docker Desktop pour l'isolation par défaut des commandes de validation ;
 - pilotes GPU à jour. `nvidia-smi` est utilisé s'il est disponible.
 
 Dans PowerShell :

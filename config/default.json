@@ -6,6 +6,6 @@
   "roles": { "planner": "gpt-oss", "coder": "qwen", "reviewer": "gpt-oss" },
   "limits": { "maxFixAttempts": 3, "maxTaskMs": 1800000, "maxOutputTokens": 1800, "maxContextChars": 40000, "maxFileBytes": 1000000, "maxPatchBytes": 200000, "maxCommandOutputBytes": 200000 },
   "resources": { "minimumFreeVramMiB": 1024, "minimumFreeRamMiB": 4096, "allowConcurrentModels": false },
-  "workspace": { "allowedCommands": ["npm test", "npm run check", "npm run typecheck", "npm run lint", "npm run build"], "writeEnabled": true },
+  "workspace": { "allowedCommands": ["npm test", "npm run check", "npm run typecheck", "npm run lint", "npm run build"], "writeEnabled": true, "sandbox": { "mode": "docker", "image": "node:22.13-bookworm-slim", "memory": "4g", "cpus": 4, "pidsLimit": 256 } },
   "runsDir": ".runs"
 }

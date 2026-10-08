@@ -8,6 +8,7 @@ Les fichiers du dépôt cible, les sorties d'outils et les diffs sont des donné
 - tailles maximales avant lecture et écriture ;
 - écriture atomique et activation conjointe par configuration et `--approve-write` ;
 - commandes exactement listées, tokenisées sans shell, avec délai et sortie bornée ;
+- exécution par défaut dans Docker sans réseau, sans capacités Linux, avec `no-new-privileges` et quotas mémoire/CPU/processus ;
 - environnement enfant réduit à une petite liste de variables système, sans variables de secrets applicatifs ;
 - endpoints HTTP validés par Harness, redirections refusées et réponses bornées ;
 - traces expurgées pour les noms de champs sensibles et formats usuels de jetons ;
@@ -15,7 +16,7 @@ Les fichiers du dépôt cible, les sorties d'outils et les diffs sont des donné
 
 ## Frontière importante
 
-Ces contrôles ne constituent pas une isolation système. Un script de test autorisé peut exécuter le code arbitraire du dépôt avec les droits du processus. Pour des dépôts non fiables, exécuter Classcale Multi-Agent dans une VM jetable ou un conteneur avec : réseau coupé ou filtré, montage du dépôt uniquement, utilisateur non privilégié, quotas CPU/RAM/processus, aucun socket Docker, aucun credential Git/cloud et répertoire temporaire dédié.
+Docker apporte une frontière système réelle pour les commandes de validation, mais ne doit pas être considéré comme une frontière absolue contre un noyau compromis. Pour les dépôts les plus hostiles, exécuter Classcale Multi-Agent lui-même dans une VM jetable avec : réseau coupé ou filtré, montage du dépôt uniquement, utilisateur non privilégié, quotas CPU/RAM/processus, aucun socket Docker exposé, aucun credential Git/cloud et répertoire temporaire dédié. Le mode `host` est réservé aux dépôts explicitement fiables.
 
 Ne mettez jamais de secrets dans la demande, le dépôt cible ou la configuration JSON. Injectez éventuellement le bearer token du serveur local via `LLM_API_KEY`, limité au processus courant.
 
