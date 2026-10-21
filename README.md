@@ -2,7 +2,7 @@
 
 **Two local LLMs that plan, code, review and test a change in an isolated Git worktree — then hand a verifiable branch to a human.** GPT-OSS 20B and Qwen 3.6 27B cooperate through an explicit state machine, with sandboxed commands, schema-validated outputs and a 50-task benchmark.
 
-[![CI](https://github.com/Matt95354855/multi-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/Matt95354855/multi-agent/actions/workflows/ci.yml) ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6) ![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A5%2022.13-417E38) ![Inference](https://img.shields.io/badge/inference-llama.cpp-6f42c1)
+[![CI](https://github.com/Matt95354855/multi-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/Matt95354855/multi-agent/actions/workflows/ci.yml) ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6) ![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A5%2022.13-417E38) ![Inference](https://img.shields.io/badge/inference-llama.cpp-6f42c1) ![License](https://img.shields.io/badge/license-MIT-green)
 
 [English](README.md) · [Français](README.fr.md)
 
@@ -62,3 +62,7 @@ Offline logic and simulated models are tested in CI; **no real GPU benchmark res
 ## Documentation
 
 [Detailed guide (FR)](docs/GUIDE.fr.md) · [Architecture](docs/architecture.md) · [Security model](docs/security.md) · [Benchmarks](docs/benchmarks.md) · [Troubleshooting](docs/troubleshooting.md)
+
+## License
+
+MIT — see [LICENSE](LICENSE).

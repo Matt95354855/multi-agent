@@ -2,7 +2,7 @@
 
 **Deux LLM locaux qui planifient, codent, relisent et testent une modification dans un Git worktree isolé — puis remettent une branche vérifiable à un humain.** GPT-OSS 20B et Qwen 3.6 27B coopèrent via une machine à états explicite, avec commandes en sandbox, sorties validées par schéma et un benchmark de 50 tâches.
 
-[![CI](https://github.com/Matt95354855/multi-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/Matt95354855/multi-agent/actions/workflows/ci.yml) ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6) ![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A5%2022.13-417E38) ![Inference](https://img.shields.io/badge/inférence-llama.cpp-6f42c1)
+[![CI](https://github.com/Matt95354855/multi-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/Matt95354855/multi-agent/actions/workflows/ci.yml) ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6) ![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A5%2022.13-417E38) ![Inference](https://img.shields.io/badge/inférence-llama.cpp-6f42c1) ![License](https://img.shields.io/badge/licence-MIT-green)
 
 [English](README.md) · [Français](README.fr.md)
 
@@ -62,3 +62,7 @@ La logique hors ligne et les modèles simulés sont testés en CI ; **aucun rés
 ## Documentation
 
 [Guide détaillé](docs/GUIDE.fr.md) · [Architecture](docs/architecture.md) · [Modèle de sécurité](docs/security.md) · [Benchmarks](docs/benchmarks.md) · [Dépannage](docs/troubleshooting.md)
+
+## Licence
+
+MIT — voir [LICENSE](LICENSE).
