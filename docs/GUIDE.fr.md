@@ -2,7 +2,7 @@
 
 > Guide détaillé (version française d'origine). Pour la vue d'ensemble, voir le [README](../README.md).
 
-Plateforme locale et bornée de développement logiciel multi-agent, conçue pour faire coopérer GPT-OSS 20B et Qwen 3.6 27B avec le [Harness Classcale](https://github.com/Matt95354855/Harness). Elle planifie une modification, travaille dans un Git worktree isolé, applique des contenus de fichiers validés, effectue une revue indépendante, lance des commandes autorisées, corrige au plus trois fois, puis laisse une branche vérifiable à un humain.
+Plateforme locale et bornée de développement logiciel multi-agent, conçue pour faire coopérer GPT-OSS 20B et Qwen 3.6 27B avec le [Harness Classcale](https://github.com/Matt95354855/llm-agent-harness). Elle planifie une modification, travaille dans un Git worktree isolé, applique des contenus de fichiers validés, effectue une revue indépendante, lance des commandes autorisées, corrige au plus trois fois, puis laisse une branche vérifiable à un humain.
 
 > État matériel : la logique hors ligne et les modèles simulés sont testés en CI. Aucune performance GPU réelle n'est incluse dans le dépôt. Les rapports marquent explicitement les campagnes simulées et ne produisent des mesures matérielles que lorsqu'elles sont réellement observées.
 
@@ -21,8 +21,8 @@ Plateforme locale et bornée de développement logiciel multi-agent, conçue pou
 ## Installation
 
 ```bash
-git clone --recurse-submodules https://github.com/Matt95354855/multi-agent.git
-cd multi-agent
+git clone --recurse-submodules https://github.com/Matt95354855/local-llm-coding-agents.git
+cd local-llm-coding-agents
 npm ci
 npm run bootstrap:harness
 npm run check
